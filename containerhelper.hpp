@@ -55,6 +55,14 @@ T extract(std::queue<T>& c)
     return ret;
 }
 
+template <typename T>
+std::vector<T> operator+(const std::vector<T>& l, const std::vector<T>& r)
+{
+    std::vector<T> ret = l;
+    std::copy(r.begin(), r.end(), std::back_inserter(ret));
+    return ret;
+}
+
 }
 }
 
