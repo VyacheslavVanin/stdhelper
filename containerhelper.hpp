@@ -34,6 +34,12 @@ inline bool any_of(const C& c, const P& p)
 }
 
 template <class C, class V>
+inline bool contain(const std::initializer_list<C>& c, const V& v)
+{
+    return any_of(c, [&v](const auto& e) { return e == v; });
+}
+
+template <class C, class V>
 inline bool contain(const C& c, const V& v)
 {
     return any_of(c, [&v](const auto& e) { return e == v; });
