@@ -1,10 +1,60 @@
 #ifndef VVVSTLHELPER_H
 #define VVVSTLHELPER_H
 #include <algorithm>
-#include <string>
-#include <vector>
-#include <stack>
+#include <ostream>
 #include <queue>
+#include <stack>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
+template <class T1, class T2>
+std::ostream& operator<<(std::ostream& str, const std::pair<T1, T2>& p)
+{
+    str << "(";
+    str << p.first << ", ";
+    str << p.second;
+    str << ")";
+    return str;
+}
+
+template <typename T>
+std::ostream& pprint_impl(const T& v, std::ostream& str)
+{
+    if (v.empty()) {
+        str << "[]";
+        return str;
+    }
+
+    str << "[";
+    for (auto i = std::begin(v); i != std::end(v); ++i) {
+        str << *i;
+        if (std::next(i) != std::end(v))
+            str << ", ";
+    }
+    str << "]";
+
+    return str;
+}
+
+#define OSTREAM_OPERATOR(TYPE)                                                 \
+    template <typename T>                                                      \
+    std::ostream& operator<<(std::ostream& str, const TYPE<T>& v)              \
+    {                                                                          \
+        return pprint_impl(v, str);                                            \
+    }
+
+#define OSTREAM_OPERATOR_2(TYPE)                                               \
+    template <typename K, typename V>                                          \
+    std::ostream& operator<<(std::ostream& str, const TYPE<K, V>& v)           \
+    {                                                                          \
+        return pprint_impl(v, str);                                            \
+    }
+
+OSTREAM_OPERATOR(std::vector);
+OSTREAM_OPERATOR(std::unordered_set);
+OSTREAM_OPERATOR_2(std::unordered_map);
 
 namespace vvv {
 namespace helpers {
@@ -69,7 +119,7 @@ std::vector<T> operator+(const std::vector<T>& l, const std::vector<T>& r)
     return ret;
 }
 
-}
-}
+} // namespace helpers
+} // namespace vvv
 
 #endif
