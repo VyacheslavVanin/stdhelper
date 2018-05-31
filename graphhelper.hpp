@@ -21,12 +21,17 @@
        std::string text;
    };
 
-   using Graph = boost::adjacency_list<boost::listS,boost::vecS,boost::directedS, std::shared_ptr<VertexData>, EdgeData>;
-   using vertex_t = boost::graph_traits<Graph>::vertex_descriptor; 
+   using Graph = boost::adjacency_list<boost::listS,
+                                       boost::vecS,
+                                       boost::directedS,
+                                       VertexData,
+                                       EdgeData>;
+   using vertex_t = boost::graph_traits<Graph>::vertex_descriptor;
    using edge_t = boost::graph_traits<Graph>::edge_descriptor;
-
 */
 
+namespace vvv {
+namespace boost_graph {
 
 template <typename GRAPH>
 using vertex_descriptor =
@@ -49,11 +54,11 @@ template <class GRAPH>
 inline std::vector<vertex_descriptor<GRAPH>>
 getPointingVertices(const GRAPH& g, vertex_descriptor<GRAPH> index)
 {
-    using edge_t   = edge_descriptor<GRAPH>;
+    using edge_t = edge_descriptor<GRAPH>;
     using vertex_t = vertex_descriptor<GRAPH>;
 
     std::vector<vertex_t> ret;
-    const auto es                     = boost::edges(g);
+    const auto es = boost::edges(g);
     const auto push_if_point_to_index = [&ret, &index](edge_t e) {
         if (e.m_target == index)
             ret.push_back(e.m_source);
@@ -72,7 +77,7 @@ inline bool isVertexTerminal(const GRAPH& g, vertex_descriptor<GRAPH> v)
 template <class GRAPH>
 inline bool isVertexHasPointer(const GRAPH& g, vertex_descriptor<GRAPH> v)
 {
-    using edge_t  = edge_descriptor<GRAPH>;
+    using edge_t = edge_descriptor<GRAPH>;
     const auto es = boost::edges(g);
     return std::any_of(es.first, es.second,
                        [&g, &v](edge_t e) { return e.m_target == v; });
@@ -135,13 +140,13 @@ template <class GRAPH>
 inline void insertGraphInsteadOf(GRAPH& dst, const GRAPH& src,
                                  vertex_descriptor<GRAPH> index)
 {
-    const auto dstSends    = getPointingVertices(dst, index);
-    const auto dstReturns  = getAdjacentVertices(dst, index);
+    const auto dstSends = getPointingVertices(dst, index);
+    const auto dstReturns = getAdjacentVertices(dst, index);
     const auto dstVertices = boost::vertices(dst);
     const auto srcToDstOffset =
         std::distance(dstVertices.first, dstVertices.second);
 
-    auto srcInputVertices  = getStartingVertices(src);
+    auto srcInputVertices = getStartingVertices(src);
     auto srcOutputVertices = getTerminalVertices(src);
 
     boost::copy_graph(src, dst);
@@ -168,7 +173,7 @@ template <class GRAPH>
 inline void attachGraph(GRAPH& g, vertex_descriptor<GRAPH> to,
                         const GRAPH& newGraph)
 {
-    auto srcInputVertices     = getStartingVertices(newGraph);
+    auto srcInputVertices = getStartingVertices(newGraph);
     const auto srcToDstOffset = boost::num_vertices(g);
 
     boost::copy_graph(newGraph, g);
@@ -185,7 +190,7 @@ inline void insertBetween(GRAPH& g, vertex_descriptor<GRAPH> first,
                           vertex_descriptor<GRAPH> second,
                           const GRAPH& newGraph)
 {
-    auto srcInputVertices  = getStartingVertices(newGraph);
+    auto srcInputVertices = getStartingVertices(newGraph);
     auto srcOutputVertices = getTerminalVertices(newGraph);
     const auto dstVertices = boost::vertices(g);
     const auto srcToDstOffset =
@@ -227,13 +232,13 @@ template <class GRAPH>
 inline void reverseOutEdgesOrder(GRAPH& g, vertex_descriptor<GRAPH> v)
 {
     using namespace std;
-    using vertex_t       = vertex_descriptor<GRAPH>;
-    using edge_t         = edge_descriptor<GRAPH>;
-    using edgeprop_t     = typename GRAPH::edge_property_type;
+    using vertex_t = vertex_descriptor<GRAPH>;
+    using edge_t = edge_descriptor<GRAPH>;
+    using edgeprop_t = typename GRAPH::edge_property_type;
     using edgearray_type = vector<tuple<vertex_t, vertex_t, edgeprop_t>>;
-    const auto edges     = boost::out_edges(v, g);
-    const auto begin     = edges.first;
-    const auto end       = edges.second;
+    const auto edges = boost::out_edges(v, g);
+    const auto begin = edges.first;
+    const auto end = edges.second;
 
     // Store edge information (source, target, data)
     edgearray_type edgearray;
@@ -248,8 +253,23 @@ inline void reverseOutEdgesOrder(GRAPH& g, vertex_descriptor<GRAPH> v)
     for_each(edgearray.rbegin(), edgearray.rend(),
              [&g, &edgearray](const typename edgearray_type::value_type& e) {
                  auto newEdge = boost::add_edge(get<0>(e), get<1>(e), g).first;
-                 g[newEdge]   = get<2>(e);
+                 g[newEdge] = get<2>(e);
              });
 }
+
+template <typename GRAPH>
+void copy_edge_data(GRAPH& graph, vertex_descriptor<GRAPH> src_0,
+                    vertex_descriptor<GRAPH> src_1,
+                    vertex_descriptor<GRAPH> dst_0,
+                    vertex_descriptor<GRAPH> dst_1)
+{
+    const auto src_edge = boost::edge(src_0, src_1, graph).first;
+    const auto src_edge_data = graph[src_edge];
+    const auto dst_edge = boost::edge(dst_0, dst_1, graph).first;
+    graph[dst_edge] = src_edge_data;
+}
+
+} // namespace boost_graph
+} // namespace vvv
 
 #endif

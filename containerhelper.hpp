@@ -56,6 +56,14 @@ OSTREAM_OPERATOR(std::vector);
 OSTREAM_OPERATOR(std::unordered_set);
 OSTREAM_OPERATOR_2(std::unordered_map);
 
+template <typename T>
+std::vector<T> operator+(const std::vector<T>& l, const std::vector<T>& r)
+{
+    std::vector<T> ret = l;
+    std::copy(r.begin(), r.end(), std::back_inserter(ret));
+    return ret;
+}
+
 namespace vvv {
 namespace helpers {
 
@@ -108,14 +116,6 @@ T extract(std::queue<T>& c)
 {
     T ret = std::move(c.front());
     c.pop();
-    return ret;
-}
-
-template <typename T>
-std::vector<T> operator+(const std::vector<T>& l, const std::vector<T>& r)
-{
-    std::vector<T> ret = l;
-    std::copy(r.begin(), r.end(), std::back_inserter(ret));
     return ret;
 }
 
