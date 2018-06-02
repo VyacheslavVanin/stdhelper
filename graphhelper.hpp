@@ -258,15 +258,24 @@ inline void reverseOutEdgesOrder(GRAPH& g, vertex_descriptor<GRAPH> v)
 }
 
 template <typename GRAPH>
-void copy_edge_data(GRAPH& graph, vertex_descriptor<GRAPH> src_0,
+bool copy_edge_data(GRAPH& graph, vertex_descriptor<GRAPH> src_0,
                     vertex_descriptor<GRAPH> src_1,
                     vertex_descriptor<GRAPH> dst_0,
                     vertex_descriptor<GRAPH> dst_1)
 {
-    const auto src_edge = boost::edge(src_0, src_1, graph).first;
-    const auto src_edge_data = graph[src_edge];
-    const auto dst_edge = boost::edge(dst_0, dst_1, graph).first;
-    graph[dst_edge] = src_edge_data;
+    const auto& src_edge = boost::edge(src_0, src_1, graph);
+    if (!src_edge.second)
+        return false;
+
+    const auto& dst_edge = boost::edge(dst_0, dst_1, graph);
+    if (!dst_edge.second)
+        return false;
+
+    const auto& dst_edge_desc = dst_edge.first;
+    const auto& src_edge_desc = src_edge.first;
+    const auto& src_edge_data = graph[src_edge_desc];
+    graph[dst_edge_desc] = src_edge_data;
+    return true;
 }
 
 } // namespace boost_graph
