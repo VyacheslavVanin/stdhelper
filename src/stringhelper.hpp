@@ -10,7 +10,7 @@ inline std::string joinStringsWith(const std::vector<std::string>& v,
 {
     std::string ret;
     const auto numStrings = v.size();
-    const auto lastIndex  = numStrings - 1;
+    const auto lastIndex = numStrings - 1;
     for (size_t i = 0; i < numStrings; ++i) {
         ret += v[i];
         if (i != lastIndex)
@@ -49,5 +49,5 @@ inline std::vector<std::string> split(const std::string& str,
     split(str, delimiter, ret);
     return ret;
 }
-}
-}
+} // namespace helpers
+} // namespace vvv

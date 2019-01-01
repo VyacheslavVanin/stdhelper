@@ -1,6 +1,6 @@
 #pragma once
-#include <string>
 #include <sstream>
+#include <string>
 
 namespace vvv {
 namespace helper {
@@ -45,5 +45,5 @@ std::string format(const std::string& fmt, const T& value, Args&&... args)
     return ss.str();
 }
 
-}
-}
+} // namespace helper
+} // namespace vvv
