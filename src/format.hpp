@@ -6,15 +6,15 @@ namespace vvv {
 namespace helper {
 
 namespace impl {
-void format(std::ostream& str, const std::string& fmt, size_t pos)
+inline void format(std::ostream& str, const std::string& fmt, size_t pos)
 {
     const char* cpos = fmt.c_str() + pos;
     str << cpos;
 }
 
 template <typename T, typename... Args>
-void format(std::ostream& str, const std::string& fmt, size_t pos,
-            const T& value, Args&&... args)
+inline void format(std::ostream& str, const std::string& fmt, size_t pos,
+                   const T& value, Args&&... args)
 {
     const auto s = fmt.size();
     const auto del_pos = fmt.find('@', pos);
@@ -31,14 +31,15 @@ void format(std::ostream& str, const std::string& fmt, size_t pos,
 } // namespace impl
 
 template <typename T, typename... Args>
-void format(std::ostream& str, const std::string& fmt, const T& value,
-            Args&&... args)
+inline void format(std::ostream& str, const std::string& fmt, const T& value,
+                   Args&&... args)
 {
     impl::format(str, fmt, 0, value, std::forward<Args>(args)...);
 }
 
 template <typename T, typename... Args>
-std::string format(const std::string& fmt, const T& value, Args&&... args)
+inline std::string format(const std::string& fmt, const T& value,
+                          Args&&... args)
 {
     std::stringstream ss;
     impl::format(ss, fmt, 0, value, std::forward<Args>(args)...);
