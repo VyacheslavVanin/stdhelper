@@ -104,7 +104,7 @@ inline bool contain(const C& c, const V& v)
 }
 
 template <typename T>
-T extract(std::stack<T>& c)
+inline T extract(std::stack<T>& c)
 {
     T ret = std::move(c.top());
     c.pop();
@@ -112,10 +112,49 @@ T extract(std::stack<T>& c)
 }
 
 template <typename T>
-T extract(std::queue<T>& c)
+inline T extract(std::queue<T>& c)
 {
     T ret = std::move(c.front());
     c.pop();
+    return ret;
+}
+
+template <typename T, typename P>
+inline std::vector<std::result_of_t<P && (T &&)>>
+map(const P& p, const std::initializer_list<T>& xs)
+{
+    using U = std::result_of_t<P && (T &&)>;
+    std::vector<U> ret;
+    ret.reserve(xs.size());
+    for (const auto& x : xs)
+        ret.push_back(p(x));
+
+    return ret;
+}
+
+template <typename T, template <typename> class C, typename P>
+inline C<std::result_of_t<P && (T &&)>> map(const P& p, const C<T>& xs)
+{
+    using U = std::result_of_t<P && (T &&)>;
+    C<U> ret;
+    ret.reserve(xs.size());
+    for (const auto& x : xs)
+        ret.push_back(p(x));
+
+    return ret;
+}
+
+template <typename T, template <typename> class A,
+          template <typename, typename> class C, typename P>
+inline C<std::result_of_t<P && (T &&)>, A<std::result_of_t<P && (T &&)>>>
+map(const P& p, const C<T, A<T>>& xs)
+{
+    using U = std::result_of_t<P && (T &&)>;
+    C<U, A<U>> ret;
+    ret.reserve(xs.size());
+    for (const auto& x : xs)
+        ret.push_back(p(x));
+
     return ret;
 }
 
