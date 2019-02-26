@@ -10,7 +10,7 @@
 #include <vector>
 
 template <class T1, class T2>
-std::ostream& operator<<(std::ostream& str, const std::pair<T1, T2>& p)
+inline std::ostream& operator<<(std::ostream& str, const std::pair<T1, T2>& p)
 {
     str << "(";
     str << p.first << ", ";
@@ -20,7 +20,7 @@ std::ostream& operator<<(std::ostream& str, const std::pair<T1, T2>& p)
 }
 
 template <typename T>
-std::ostream& pprint_impl(const T& v, std::ostream& str)
+inline std::ostream& pprint_impl(const T& v, std::ostream& str)
 {
     if (v.empty()) {
         str << "[]";
@@ -40,14 +40,14 @@ std::ostream& pprint_impl(const T& v, std::ostream& str)
 
 #define OSTREAM_OPERATOR(TYPE)                                                 \
     template <typename T>                                                      \
-    std::ostream& operator<<(std::ostream& str, const TYPE<T>& v)              \
+    inline std::ostream& operator<<(std::ostream& str, const TYPE<T>& v)       \
     {                                                                          \
         return pprint_impl(v, str);                                            \
     }
 
 #define OSTREAM_OPERATOR_2(TYPE)                                               \
     template <typename K, typename V>                                          \
-    std::ostream& operator<<(std::ostream& str, const TYPE<K, V>& v)           \
+    inline std::ostream& operator<<(std::ostream& str, const TYPE<K, V>& v)    \
     {                                                                          \
         return pprint_impl(v, str);                                            \
     }
