@@ -1,10 +1,12 @@
 #pragma once
 #include <vector>
+#include <cassert>
 
 namespace vvv {
 template<typename Iterator>
 class view {
     public:
+    using value_type = typename std::iterator_traits<Iterator>::value_type;
     view(Iterator begin, Iterator end) : begin_(begin), end_(end) {}
 
     Iterator begin() const {return begin_;}
@@ -38,6 +40,10 @@ inline auto make_view(const T& t) {
     return view<decltype(t.begin())>(t.begin(), t.end());
 }
 
+/// Fast slice no runtime checks performed
+/// @param begin starting index
+/// @param end ending index
+/// @return view containing elements with indices within this [begin, end) range
 template<typename T>
 inline view<T> slice(const view<T>& t, size_t begin, size_t end)
 {
@@ -53,6 +59,8 @@ inline bool is_valid_index(const view<T>& t, size_t index)
     return index < t.size();
 }
 
+/// Safe slice. Same as slise but if begin or end greater than t.end() then
+/// parameters truncated to valid index
 template<typename T>
 inline view<T> sslice(const view<T>& t, size_t begin, size_t end)
 {
@@ -62,6 +70,8 @@ inline view<T> sslice(const view<T>& t, size_t begin, size_t end)
     return view<T>(a, b);
 }
 
+/// Split view into p\ splits views. If view \v cannot be splitted to equal
+/// splits then reminded will be added to last split
 template<typename T>
 inline std::vector<view<T>> split(const view<T>& v, size_t splits=2)
 {

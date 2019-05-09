@@ -17,7 +17,7 @@ add_subdirectory(tests)
 
 # Installation
 set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "..." FORCE)
-set_target_properties(stdhelper PROPERTIES PUBLIC_HEADER ${HDRS})
+set_target_properties(stdhelper PROPERTIES PUBLIC_HEADER "${HDRS}")
 INSTALL(TARGETS stdhelper
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
