@@ -11,6 +11,8 @@ include_directories(${GTEST_INCLUDE_DIRS} .)
 
 file(GLOB_RECURSE SRCS *.cpp)
 file(GLOB_RECURSE HDRS *.h *.hpp)
+
+include_directories(stdhelper/include)
 add_executable(vvvstdhelper_test ${SRCS} ${HDRS})
 target_link_libraries(vvvstdhelper_test ${GTEST_LIBRARIES} Threads::Threads)
 

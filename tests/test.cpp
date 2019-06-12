@@ -1,6 +1,6 @@
-#include "../src/containerhelper.hpp"
-#include "../src/format.hpp"
-#include "../src/view.hpp"
+#include "stdhelper/containerhelper.hpp"
+#include "stdhelper/format.hpp"
+#include "stdhelper/view.hpp"
 #include <gtest/gtest.h>
 
 TEST(format, single)

@@ -7,7 +7,7 @@ set (CMAKE_CXX_STANDARD 14)
 include_directories(src)
 
 # Set Source files
-file(GLOB_RECURSE HDRS src/*.hpp)
+file(GLOB_RECURSE HDRS include/stdhelper/*.hpp)
 add_library(stdhelper STATIC ${SRCS} ${HDRS})
 set_target_properties(stdhelper PROPERTIES LINKER_LANGUAGE CXX)
 
