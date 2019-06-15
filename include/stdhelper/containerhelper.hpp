@@ -1,13 +1,29 @@
 #ifndef VVVSTLHELPER_H
 #define VVVSTLHELPER_H
 #include <algorithm>
+#include <map>
 #include <ostream>
 #include <queue>
+#include <set>
 #include <stack>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+
+#define OSTREAM_OPERATOR_DEF(TYPE)                                             \
+    template <typename T>                                                      \
+    inline std::ostream& operator<<(std::ostream& str, const TYPE<T>& v);
+
+#define OSTREAM_OPERATOR_2_DEF(TYPE)                                           \
+    template <typename K, typename V>                                          \
+    inline std::ostream& operator<<(std::ostream& str, const TYPE<K, V>& v);
+
+OSTREAM_OPERATOR_DEF(std::vector);
+OSTREAM_OPERATOR_DEF(std::unordered_set);
+OSTREAM_OPERATOR_2_DEF(std::unordered_map);
+OSTREAM_OPERATOR_DEF(std::set);
+OSTREAM_OPERATOR_2_DEF(std::map);
 
 template <class T1, class T2>
 inline std::ostream& operator<<(std::ostream& str, const std::pair<T1, T2>& p)
@@ -55,6 +71,8 @@ inline std::ostream& pprint_impl(const T& v, std::ostream& str)
 OSTREAM_OPERATOR(std::vector);
 OSTREAM_OPERATOR(std::unordered_set);
 OSTREAM_OPERATOR_2(std::unordered_map);
+OSTREAM_OPERATOR(std::set);
+OSTREAM_OPERATOR_2(std::map);
 
 template <typename T>
 std::vector<T> operator+(const std::vector<T>& l, const std::vector<T>& r)
