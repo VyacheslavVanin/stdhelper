@@ -1,26 +1,20 @@
 cmake_minimum_required(VERSION 3.1)
-project(stdhelper)
+project(vvvstdhelper)
 
 set (CMAKE_CXX_STANDARD 14)
 
-# Set include path
-include_directories(src)
 
 # Set Source files
-file(GLOB_RECURSE HDRS include/stdhelper/*.hpp)
-add_library(stdhelper STATIC ${SRCS} ${HDRS})
-set_target_properties(stdhelper PROPERTIES LINKER_LANGUAGE CXX)
+file(GLOB_RECURSE HDRS include/vvvstdhelper/*.hpp)
+
+add_library(vvvstdhelper INTERFACE)
 
 
-enable_testing()
-add_subdirectory(tests)
+option(WITH_TESTS "BUILD WITH TESTS" OFF)
+if(WITH_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif(WITH_TESTS)
 
 # Installation
 set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "..." FORCE)
-set_target_properties(stdhelper PROPERTIES PUBLIC_HEADER "${HDRS}")
-INSTALL(TARGETS stdhelper
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
-        PUBLIC_HEADER DESTINATION include/vvvstdhelper
-)
-
