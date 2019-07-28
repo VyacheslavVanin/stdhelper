@@ -1,5 +1,4 @@
-#ifndef GRAPHHELPER_H
-#define GRAPHHELPER_H
+#pragma once
 #include <algorithm>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/copy.hpp>
@@ -280,5 +279,3 @@ bool copy_edge_data(GRAPH& graph, vertex_descriptor<GRAPH> src_0,
 
 } // namespace boost_graph
 } // namespace vvv
-
-#endif

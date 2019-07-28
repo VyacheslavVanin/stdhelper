@@ -1,5 +1,4 @@
-#ifndef VVVSTLHELPER_H
-#define VVVSTLHELPER_H
+#pragma once
 #include <algorithm>
 #include <map>
 #include <ostream>
@@ -178,5 +177,3 @@ map(const P& p, const C<T, A<T>>& xs)
 
 } // namespace helpers
 } // namespace vvv
-
-#endif
