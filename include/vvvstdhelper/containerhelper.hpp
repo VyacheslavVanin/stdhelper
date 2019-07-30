@@ -175,5 +175,8 @@ map(const P& p, const C<T, A<T>>& xs)
     return ret;
 }
 
+static auto getFirst = [](const auto& p) -> const auto& { return p.first; };
+static auto getSecond = [](const auto& p) -> const auto& { return p.second; };
+
 } // namespace helpers
 } // namespace vvv
