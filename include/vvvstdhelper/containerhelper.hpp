@@ -20,6 +20,7 @@
 
 OSTREAM_OPERATOR_DEF(std::vector);
 OSTREAM_OPERATOR_DEF(std::unordered_set);
+OSTREAM_OPERATOR_2_DEF(std::vector);
 OSTREAM_OPERATOR_2_DEF(std::unordered_map);
 OSTREAM_OPERATOR_DEF(std::set);
 OSTREAM_OPERATOR_2_DEF(std::map);
@@ -68,6 +69,7 @@ inline std::ostream& pprint_impl(const T& v, std::ostream& str)
     }
 
 OSTREAM_OPERATOR(std::vector);
+OSTREAM_OPERATOR_2(std::vector);
 OSTREAM_OPERATOR(std::unordered_set);
 OSTREAM_OPERATOR_2(std::unordered_map);
 OSTREAM_OPERATOR(std::set);

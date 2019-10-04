@@ -33,6 +33,17 @@ TEST(format, too_many_placeholders)
     EXPECT_EQ(ret, "hello 42 @");
 }
 
+TEST(format, vector)
+{
+    const std::vector<int> v = {1, 2, 3, 42, 100500};
+    auto ret = vvv::helper::format("@", v);
+    EXPECT_EQ(ret, "[1, 2, 3, 42, 100500]");
+
+    const std::vector<std::string> vs = {"aaa", "bbb", "hello"};
+    auto rets = vvv::helper::format("@", vs);
+    EXPECT_EQ(rets, "[aaa, bbb, hello]");
+}
+
 TEST(container, filter_rvalue)
 {
     using vvv::helpers::filter;
