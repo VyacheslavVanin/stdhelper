@@ -18,6 +18,7 @@
     template <typename K, typename V>                                          \
     inline std::ostream& operator<<(std::ostream& str, const TYPE<K, V>& v);
 
+namespace std {
 OSTREAM_OPERATOR_DEF(std::vector);
 OSTREAM_OPERATOR_DEF(std::unordered_set);
 OSTREAM_OPERATOR_2_DEF(std::vector);
@@ -34,6 +35,7 @@ inline std::ostream& operator<<(std::ostream& str, const std::pair<T1, T2>& p)
     str << ")";
     return str;
 }
+} // namespace std
 
 template <typename T>
 inline std::ostream& pprint_impl(const T& v, std::ostream& str)
@@ -68,6 +70,7 @@ inline std::ostream& pprint_impl(const T& v, std::ostream& str)
         return pprint_impl(v, str);                                            \
     }
 
+namespace std {
 OSTREAM_OPERATOR(std::vector);
 OSTREAM_OPERATOR_2(std::vector);
 OSTREAM_OPERATOR(std::unordered_set);
@@ -82,6 +85,7 @@ std::vector<T> operator+(const std::vector<T>& l, const std::vector<T>& r)
     std::copy(r.begin(), r.end(), std::back_inserter(ret));
     return ret;
 }
+} // namespace std
 
 namespace vvv {
 namespace helpers {
