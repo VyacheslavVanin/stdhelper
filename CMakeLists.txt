@@ -18,3 +18,6 @@ endif(WITH_TESTS)
 
 # Installation
 set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "..." FORCE)
+install(DIRECTORY include/vvvstdhelper
+        DESTINATION include
+        FILES_MATCHING PATTERN "*.hpp")
