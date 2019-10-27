@@ -3,8 +3,7 @@
 
 auto is_view_eq = [](const auto& a, const auto& view) {
     ASSERT_EQ(a.size(), view.size());
-    ASSERT_EQ(a.begin(), view.begin());
-    ASSERT_EQ(a.end(), view.end());
+    ASSERT_EQ(&*a.begin(), view.begin());
     for (size_t i = 0; i < a.size(); ++i)
         EXPECT_EQ(a[i], view[i]);
 };

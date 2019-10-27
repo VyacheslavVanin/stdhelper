@@ -4,11 +4,14 @@
 
 namespace vvv {
 /// Mutable version of View class
-template <typename Iterator>
+template <typename T>
 class VarView {
 public:
-    using value_type = typename std::iterator_traits<Iterator>::value_type;
+    using value_type = T;
+    using Iterator = T*;
     VarView(Iterator begin, Iterator end) : begin_(begin), end_(end) {}
+    VarView(Iterator begin, size_t size) : VarView(begin, begin + size) {}
+    VarView(std::vector<value_type>& v) : VarView(v.data(), v.size()) {}
 
     const Iterator begin() const { return begin_; }
     const Iterator end() const { return end_; }
@@ -40,12 +43,15 @@ private:
     Iterator end_;
 };
 
-template <typename Iterator>
+template <typename T>
 class View {
 public:
-    using value_type = typename std::iterator_traits<Iterator>::value_type;
+    using value_type = T;
+    using Iterator = const T*;
     View(Iterator begin, Iterator end) : begin_(begin), end_(end) {}
-    View(const VarView<Iterator>& vv) : begin_(vv.begin()), end_(vv.end()) {}
+    View(Iterator begin, size_t size) : View(begin, begin + size) {}
+    View(const VarView<value_type>& v) : View(v.begin(), v.end()) {}
+    View(const std::vector<value_type>& v) : View(v.data(), v.size()) {}
 
     Iterator begin() const { return begin_; }
     Iterator end() const { return end_; }
@@ -77,12 +83,12 @@ private:
 template <typename T>
 inline auto make_view(const T& t)
 {
-    return View<decltype(t.begin())>(t.begin(), t.end());
+    return View<typename T::value_type>(t.data(), t.size());
 }
 template <typename T>
 inline auto make_view(T& t)
 {
-    return VarView<decltype(t.begin())>(t.begin(), t.end());
+    return VarView<typename T::value_type>(t.data(), t.size());
 }
 
 /// Fast slice no runtime checks performed
