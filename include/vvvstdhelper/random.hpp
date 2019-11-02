@@ -32,4 +32,12 @@ inline double random<double>(double min, double max)
 {
     return random_real<double>(min, max);
 }
+
+template <typename T>
+struct Random {
+    Random(T min, T max) : min(min), max(max) {}
+    T operator()() { return vvv::random(min, max); }
+    T min;
+    T max;
+};
 } // namespace vvv
