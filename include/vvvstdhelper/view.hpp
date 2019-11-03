@@ -1,6 +1,7 @@
 #pragma once
 #include <cassert>
 #include <vector>
+#include <ostream>
 
 namespace vvv {
 /// Mutable version of View class
@@ -176,5 +177,23 @@ inline std::vector<VarView<T>> split(VarView<T>& v, size_t splits = 2)
     }
 
     return ret;
+}
+
+template<typename T>
+inline std::ostream& operator<<(std::ostream& str, const VarView<T>& vs) {
+    str << "[";
+    for (const auto& v : vs)
+        str << v << ", ";
+    str << "]";
+    return str;
+}
+
+template<typename T>
+inline std::ostream& operator<<(std::ostream& str, const View<T>& vs) {
+    str << "[";
+    for (const auto& v : vs)
+        str << v << ", ";
+    str << "]";
+    return str;
 }
 } // namespace vvv
