@@ -1,7 +1,7 @@
 #pragma once
 #include <cassert>
-#include <vector>
 #include <ostream>
+#include <vector>
 
 namespace vvv {
 /// Mutable version of View class
@@ -10,6 +10,12 @@ class VarView {
 public:
     using value_type = T;
     using Iterator = T*;
+    VarView() = default;
+    VarView(const VarView&) = default;
+    VarView& operator=(const VarView&) = default;
+    VarView(VarView&&) noexcept = default;
+    VarView& operator=(VarView&&) noexcept = default;
+
     VarView(Iterator begin, Iterator end) : begin_(begin), end_(end) {}
     VarView(Iterator begin, size_t size) : VarView(begin, begin + size) {}
     VarView(std::vector<value_type>& v) : VarView(v.data(), v.size()) {}
@@ -49,6 +55,12 @@ class View {
 public:
     using value_type = T;
     using Iterator = const T*;
+    View() = default;
+    View(const View&) = default;
+    View& operator=(const View&) = default;
+    View(View&&) noexcept = default;
+    View& operator=(View&&) noexcept = default;
+
     View(Iterator begin, Iterator end) : begin_(begin), end_(end) {}
     View(Iterator begin, size_t size) : View(begin, begin + size) {}
     View(const VarView<value_type>& v) : View(v.begin(), v.end()) {}
@@ -179,8 +191,9 @@ inline std::vector<VarView<T>> split(VarView<T>& v, size_t splits = 2)
     return ret;
 }
 
-template<typename T>
-inline std::ostream& operator<<(std::ostream& str, const VarView<T>& vs) {
+template <typename T>
+inline std::ostream& operator<<(std::ostream& str, const VarView<T>& vs)
+{
     str << "[";
     for (const auto& v : vs)
         str << v << ", ";
@@ -188,8 +201,9 @@ inline std::ostream& operator<<(std::ostream& str, const VarView<T>& vs) {
     return str;
 }
 
-template<typename T>
-inline std::ostream& operator<<(std::ostream& str, const View<T>& vs) {
+template <typename T>
+inline std::ostream& operator<<(std::ostream& str, const View<T>& vs)
+{
     str << "[";
     for (const auto& v : vs)
         str << v << ", ";
