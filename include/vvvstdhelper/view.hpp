@@ -117,7 +117,7 @@ inline View<T> slice(const V<T>& t, size_t begin, size_t end)
     return View<T>(a, b);
 }
 template <typename T>
-inline VarView<T> slice(VarView<T>& t, size_t begin, size_t end)
+inline VarView<T> slice(VarView<T> t, size_t begin, size_t end)
 {
     const auto a = t.begin() + begin;
     const auto b = t.begin() + end;
@@ -142,7 +142,7 @@ inline View<T> sslice(const V<T>& t, size_t begin, size_t end)
     return View<T>(a, b);
 }
 template <typename T>
-inline VarView<T> sslice(VarView<T>& t, size_t begin, size_t end)
+inline VarView<T> sslice(VarView<T> t, size_t begin, size_t end)
 {
     const auto tend = t.end();
     const auto a = is_valid_index(t, begin) ? t.begin() + begin : tend;
@@ -172,7 +172,7 @@ inline std::vector<View<T>> split(const V<T>& v, size_t splits = 2)
     return ret;
 }
 template <typename T>
-inline std::vector<VarView<T>> split(VarView<T>& v, size_t splits = 2)
+inline std::vector<VarView<T>> split(VarView<T> v, size_t splits = 2)
 {
     const auto size = v.size();
     const auto split_size = size / splits;
