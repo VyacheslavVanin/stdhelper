@@ -168,12 +168,11 @@ inline C<std::result_of_t<P && (T &&)>> map(const P& p, const C<T>& xs)
 }
 
 template <typename T, template <typename> class A,
-          template <typename, typename> class C, typename P>
-inline C<std::result_of_t<P && (T &&)>, A<std::result_of_t<P && (T &&)>>>
-map(const P& p, const C<T, A<T>>& xs)
+          template <typename, typename> class C, typename P,
+          typename R = std::result_of_t<P && (T &&)>>
+inline C<R, A<R>> map(const P& p, const C<T, A<T>>& xs)
 {
-    using U = std::result_of_t<P && (T &&)>;
-    C<U, A<U>> ret;
+    C<R, A<R>> ret;
     ret.reserve(xs.size());
     for (const auto& x : xs)
         ret.push_back(p(x));
