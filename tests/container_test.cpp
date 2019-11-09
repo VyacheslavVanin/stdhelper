@@ -1,5 +1,6 @@
 #include "vvvstdhelper/containerhelper.hpp"
 #include <gtest/gtest.h>
+#include <type_traits>
 
 TEST(container, filter_rvalue)
 {
@@ -57,4 +58,21 @@ TEST(container, map)
 
     const std::vector<std::string> expected_string_vv = {"1", "3", "5", "7"};
     EXPECT_EQ(expected_string_vv, string_vv);
+}
+
+TEST(container, map2)
+{
+    using vvv::helpers::map;
+    std::vector<int> vv{1, 3, 5, 7};
+    std::vector<float> vv2{2, 5, 8, 10};
+
+    const auto& lambda = [](const auto& v, const auto& v2) { return v * v2; };
+    const auto& double_vv = map(lambda, vv, vv2);
+
+    const std::vector<float> expected_double{2, 15, 40, 70};
+    EXPECT_EQ(expected_double, double_vv);
+
+    std::vector<float> out(4);
+    map(out, lambda, vv, vv2);
+    EXPECT_EQ(expected_double, out);
 }

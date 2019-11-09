@@ -167,6 +167,47 @@ inline C<std::result_of_t<P && (T &&)>> map(const P& p, const C<T>& xs)
     return ret;
 }
 
+template <typename C, typename C2, typename P,
+          typename T = typename C::value_type,
+          typename T2 = typename C2::value_type,
+          typename R = std::result_of_t<P && (T&&, T2&&)>,
+          typename RC = std::vector<R>>
+inline RC map(const P& p, const C& xs, const C2& ys)
+{
+    // TODO: reimplement via some sort of zip iterator
+    // TODO: support more types
+    RC ret;
+    const auto ret_size = std::min(xs.size(), ys.size());
+    ret.reserve(ret_size);
+    for (size_t i = 0; i < ret_size; ++i)
+        ret.push_back(p(xs[i], ys[i]));
+
+    return ret;
+}
+
+template <typename RC, typename C, typename P,
+          typename T = typename C::value_type,
+          typename RT = typename RC::value_type,
+          typename PCALLABLE = std::result_of_t<P && (T &&)>>
+inline void map(RC& ret, const P& p, const C& xs)
+{
+    const auto ret_size = std::min({xs.size(), ret.size()});
+    for (size_t i = 0; i < ret_size; ++i)
+        ret[i] = p(xs[i]);
+}
+
+template <typename RC, typename C, typename C2, typename P,
+          typename T = typename C::value_type,
+          typename T2 = typename C2::value_type,
+          typename RT = typename RC::value_type,
+          typename PCALLABLE = std::result_of_t<P && (T&&, T&&)>>
+inline void map(RC& ret, const P& p, const C& xs, const C2& ys)
+{
+    const auto ret_size = std::min({xs.size(), ys.size(), ret.size()});
+    for (size_t i = 0; i < ret_size; ++i)
+        ret[i] = p(xs[i], ys[i]);
+}
+
 template <typename T, template <typename> class A,
           template <typename, typename> class C, typename P,
           typename R = std::result_of_t<P && (T &&)>>
