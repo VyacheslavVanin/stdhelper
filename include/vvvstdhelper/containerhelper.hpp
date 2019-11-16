@@ -200,12 +200,26 @@ template <typename RC, typename C, typename C2, typename P,
           typename T = typename C::value_type,
           typename T2 = typename C2::value_type,
           typename RT = typename RC::value_type,
-          typename PCALLABLE = std::result_of_t<P && (T&&, T&&)>>
+          typename PCALLABLE = std::result_of_t<P && (T&&, T2&&)>>
 inline void map(RC& ret, const P& p, const C& xs, const C2& ys)
 {
     const auto ret_size = std::min({xs.size(), ys.size(), ret.size()});
     for (size_t i = 0; i < ret_size; ++i)
         ret[i] = p(xs[i], ys[i]);
+}
+
+template <typename RC, typename C, typename C2, typename C3, typename P,
+          typename T = typename C::value_type,
+          typename T2 = typename C2::value_type,
+          typename T3 = typename C3::value_type,
+          typename RT = typename RC::value_type,
+          typename PCALLABLE = std::result_of_t<P && (T&&, T2&&, T3&&)>>
+inline void map(RC& ret, const P& p, const C& xs, const C2& ys, const C3& zs)
+{
+    const auto ret_size =
+        std::min({xs.size(), ys.size(), zs.size(), ret.size()});
+    for (size_t i = 0; i < ret_size; ++i)
+        ret[i] = p(xs[i], ys[i], zs[i]);
 }
 
 template <typename T, template <typename> class A,
