@@ -42,3 +42,35 @@ TEST(format, vector)
     auto rets = vvv::helper::format("@", vs);
     EXPECT_EQ(rets, "[aaa, bbb, hello]");
 }
+
+TEST(format, map)
+{
+    const std::unordered_map<int, int> v = {
+        {1, 100},
+    };
+    auto ret = vvv::helper::format("@", v);
+    EXPECT_EQ(ret, "[(1, 100)]");
+}
+
+TEST(format, multimap)
+{
+    const std::unordered_multimap<int, int> v = {{1, 100}, {1, 200}};
+    auto ret = vvv::helper::format("@", v);
+    EXPECT_EQ(ret, "[(1, 200), (1, 100)]");
+}
+
+TEST(format, set)
+{
+    const std::unordered_set<int> v = {
+        1,
+    };
+    auto ret = vvv::helper::format("@", v);
+    EXPECT_EQ(ret, "[1]");
+}
+
+TEST(format, multiset)
+{
+    const std::unordered_multiset<int> v = {1, 1};
+    auto ret = vvv::helper::format("@", v);
+    EXPECT_EQ(ret, "[1, 1]");
+}

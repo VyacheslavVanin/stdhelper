@@ -21,10 +21,14 @@
 namespace std {
 OSTREAM_OPERATOR_DEF(std::vector);
 OSTREAM_OPERATOR_DEF(std::unordered_set);
+OSTREAM_OPERATOR_DEF(std::unordered_multiset);
 OSTREAM_OPERATOR_2_DEF(std::vector);
 OSTREAM_OPERATOR_2_DEF(std::unordered_map);
+OSTREAM_OPERATOR_2_DEF(std::unordered_multimap);
 OSTREAM_OPERATOR_DEF(std::set);
+OSTREAM_OPERATOR_DEF(std::multiset);
 OSTREAM_OPERATOR_2_DEF(std::map);
+OSTREAM_OPERATOR_2_DEF(std::multimap);
 
 template <class T1, class T2>
 inline std::ostream& operator<<(std::ostream& str, const std::pair<T1, T2>& p)
@@ -74,9 +78,13 @@ namespace std {
 OSTREAM_OPERATOR(std::vector);
 OSTREAM_OPERATOR_2(std::vector);
 OSTREAM_OPERATOR(std::unordered_set);
+OSTREAM_OPERATOR(std::unordered_multiset);
 OSTREAM_OPERATOR_2(std::unordered_map);
+OSTREAM_OPERATOR_2(std::unordered_multimap);
 OSTREAM_OPERATOR(std::set);
+OSTREAM_OPERATOR(std::multiset);
 OSTREAM_OPERATOR_2(std::map);
+OSTREAM_OPERATOR_2(std::multimap);
 
 template <typename T>
 std::vector<T> operator+(const std::vector<T>& l, const std::vector<T>& r)
