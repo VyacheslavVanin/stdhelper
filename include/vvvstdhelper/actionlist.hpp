@@ -23,10 +23,10 @@ int main()
 }
 */
 
-template <typename T>
+template <typename T, typename F = std::function<T>>
 class ActionList {
 public:
-    void addAction(const std::function<T>& f) { actions.push_back(f); }
+    void addAction(const F& f) { actions.push_back(f); }
 
     template <typename... Args>
     void operator()(const Args&... args) const
@@ -36,7 +36,7 @@ public:
     }
 
 private:
-    std::vector<std::function<T>> actions = {};
+    std::vector<F> actions = {};
 };
 
 } // namespace vvv

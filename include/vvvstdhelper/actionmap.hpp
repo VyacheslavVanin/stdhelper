@@ -6,12 +6,12 @@
 
 namespace vvv {
 
-template <typename K, typename T>
+template <typename K, typename T, typename F = std::function<T>>
 class ActionMap {
 public:
     using key_type = K;
 
-    void addAction(const key_type& name, const std::function<T>& f)
+    void addAction(const key_type& name, const F& f)
     {
         actions[name].addAction(f);
     }
@@ -31,7 +31,7 @@ public:
     }
 
 private:
-    std::unordered_map<key_type, ActionList<T>> actions = {};
+    std::unordered_map<key_type, ActionList<T, F>> actions = {};
 };
 
 } // namespace vvv

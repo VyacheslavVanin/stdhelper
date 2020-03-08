@@ -1,6 +1,6 @@
-#include "vvvstdhelper/actionlist.hpp"
-#include "vvvstdhelper/actionmap.hpp"
 #include <gtest/gtest.h>
+#include <vvvstdhelper/actionlist.hpp>
+#include <vvvstdhelper/actionmap.hpp>
 
 TEST(actionlist, actionlist)
 {
