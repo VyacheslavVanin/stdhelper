@@ -14,6 +14,9 @@ template <typename T, typename A = NoOp<T>>
 class DataListener : protected A {
 private:
 public:
+    using value_type = T;
+    using actions_type = A;
+
     struct MutableProxy {
         using actions_type = A;
 
