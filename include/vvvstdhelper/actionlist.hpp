@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <functional>
 #include <vector>
 
@@ -27,6 +28,16 @@ template <typename T, typename F = std::function<T>>
 class ActionList {
 public:
     void addAction(const F& f) { actions.push_back(f); }
+
+    /// Remove first occurance of \p f from action list
+    auto remove(const F& f)
+    {
+        auto it = std::find(actions.begin(), actions.end(), f);
+        if (it == actions.end())
+            return it;
+
+        return actions.erase(it);
+    }
 
     template <typename... Args>
     void operator()(const Args&... args) const

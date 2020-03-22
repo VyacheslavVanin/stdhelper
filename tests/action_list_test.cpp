@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <vvvstdhelper/actionlist.hpp>
 #include <vvvstdhelper/actionmap.hpp>
+#include <vvvstdhelper/shared_function.hpp>
 
 TEST(actionlist, actionlist)
 {
@@ -30,5 +31,29 @@ TEST(actionmap, actionmap)
     EXPECT_EQ(out2, "");
 
     m.invoke("action2");
+    EXPECT_EQ(out2, "world");
+}
+
+TEST(actionlist, aaaa)
+{
+    using vvv::SharedFunction;
+    vvv::ActionList<void(void), SharedFunction<void(void)>> l;
+    std::string out1;
+    std::string out2;
+
+    auto f = SharedFunction<void(void)>([&out1] { out1 = "hello"; });
+    l.addAction(f);
+    l.addAction([&out2] { out2 = "world"; });
+
+    l();
+    EXPECT_EQ(out1, "hello");
+    EXPECT_EQ(out2, "world");
+
+    out1.clear();
+    out2.clear();
+    l.remove(f);
+    l();
+
+    EXPECT_EQ(out1, "");
     EXPECT_EQ(out2, "world");
 }
