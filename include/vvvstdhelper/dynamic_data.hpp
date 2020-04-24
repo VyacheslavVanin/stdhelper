@@ -62,7 +62,7 @@ public:
 
     /// Numeric Unary Operators
     template <typename OP>
-    DynamicData func()
+    DynamicData func() const
     {
         DynamicData ret;
         auto weak_ret = std::weak_ptr<Listener<T>>(ret.data);
@@ -85,7 +85,7 @@ public:
 
     /// Numeric Binary Operators
     template <typename OP, typename U>
-    DynamicData func(U k)
+    DynamicData func(U k) const
     {
         DynamicData ret;
         auto weak_ret = std::weak_ptr<Listener<T>>(ret.data);
@@ -103,32 +103,32 @@ public:
     }
 
     template <typename U>
-    DynamicData operator*(U k)
+    DynamicData operator*(U k) const
     {
         return func<std::multiplies<T>>(k);
     }
 
     template <typename U>
-    DynamicData operator/(U k)
+    DynamicData operator/(U k) const
     {
         return func<std::divides<T>>(k);
     }
 
     template <typename U>
-    DynamicData operator-(U k)
+    DynamicData operator-(U k) const
     {
         return func<std::minus<T>>(k);
     }
 
     template <typename U>
-    DynamicData operator+(U k)
+    DynamicData operator+(U k) const
     {
         return func<std::plus<T>>(k);
     }
 
     /// Objects Binary Operators
     template <typename OP>
-    DynamicData func(DynamicData<T>& other) &
+    DynamicData func(const DynamicData<T>& other) const
     {
         DynamicData ret;
         auto weak_ret = std::weak_ptr<Listener<T>>(ret.data);
@@ -178,19 +178,19 @@ public:
         return ret;
     }
 
-    DynamicData operator*(DynamicData& other)
+    DynamicData operator*(const DynamicData& other) const
     {
         return func<std::multiplies<T>>(other);
     }
-    DynamicData operator/(DynamicData& other)
+    DynamicData operator/(const DynamicData& other) const
     {
         return func<std::divides<T>>(other);
     }
-    DynamicData operator-(DynamicData& other)
+    DynamicData operator-(const DynamicData& other) const
     {
         return func<std::minus<T>>(other);
     }
-    DynamicData operator+(DynamicData& other)
+    DynamicData operator+(const DynamicData& other) const
     {
         return func<std::plus<T>>(other);
     }

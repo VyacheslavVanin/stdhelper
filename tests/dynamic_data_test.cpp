@@ -121,3 +121,14 @@ TEST(DynData, max_min)
     a = 5;
     ASSERT_EQ(c.get(), a.get());
 }
+
+TEST(DynData, const_base)
+{
+    const DD<double> a = 10;
+    const DD<double> b = 100;
+    const auto c = a + b;
+
+    ASSERT_EQ(10, a.get());
+    ASSERT_EQ(100, b.get());
+    ASSERT_EQ(110, c.get());
+}
