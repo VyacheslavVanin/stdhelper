@@ -20,7 +20,11 @@ public:
 
     DynamicData() : DynamicData(T{}) {}
     DynamicData(T val) : data(std::make_shared<Listener<T>>(val)) {}
-    DynamicData(const DynamicData& other) : binded{other.data} { bind(); }
+    DynamicData(const DynamicData& other)
+        : data(std::make_shared<Listener<T>>()), binded{other.data}
+    {
+        bind();
+    }
 
     DynamicData(DynamicData&& other) : binded{std::move(other.data)} { bind(); }
 

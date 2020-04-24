@@ -132,3 +132,20 @@ TEST(DynData, const_base)
     ASSERT_EQ(100, b.get());
     ASSERT_EQ(110, c.get());
 }
+
+TEST(DynData, const_assign)
+{
+    const DD<double> a = 10;
+    DD<double> b = 100;
+    const auto c = a + b;
+    auto d = c;
+
+    ASSERT_EQ(10, a.get());
+    ASSERT_EQ(100, b.get());
+    ASSERT_EQ(110, c.get());
+    ASSERT_EQ(110, d.get());
+
+    b = 200;
+    ASSERT_EQ(210, c.get());
+    ASSERT_EQ(210, d.get());
+}
