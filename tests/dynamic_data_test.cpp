@@ -149,3 +149,31 @@ TEST(DynData, const_assign)
     ASSERT_EQ(210, c.get());
     ASSERT_EQ(210, d.get());
 }
+
+using DDD = DD<double>;
+using DDD_pair = std::pair<DDD, DDD>;
+
+void Set(DDD_pair& p, DDD a, DDD b)
+{
+    p.first = std::move(a);
+    p.second = p.first + std::move(b);
+}
+
+TEST(DynData, preserve_dependency)
+{
+    DDD_pair a;
+    DDD_pair b;
+    Set(a, 10, 20);
+    Set(b, a.second + 10, 30);
+
+    ASSERT_EQ(a.first.get(), 10);
+    ASSERT_EQ(a.second.get(), 30);
+    ASSERT_EQ(b.first.get(), 40);
+    ASSERT_EQ(b.second.get(), 70);
+
+    Set(a, 10, 40);
+    ASSERT_EQ(a.first.get(), 10);
+    ASSERT_EQ(a.second.get(), 50);
+    ASSERT_EQ(b.first.get(), 60);
+    ASSERT_EQ(b.second.get(), 90);
+}

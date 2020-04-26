@@ -21,22 +21,30 @@ public:
     DynamicData() : DynamicData(T{}) {}
     DynamicData(T val) : data(std::make_shared<Listener<T>>(val)) {}
     DynamicData(const DynamicData& other)
-        : data(std::make_shared<Listener<T>>()), binded{other.data}
+        : data(std::make_shared<Listener<T>>()), binded{other.data},
+          dependencies{other.dependencies}
     {
         bind();
     }
 
-    DynamicData(DynamicData&& other) : binded{std::move(other.data)} { bind(); }
+    DynamicData(DynamicData&& other)
+        : data(std::make_shared<Listener<T>>()), binded{std::move(other.data)},
+          dependencies{std::move(other.dependencies)}
+    {
+        bind();
+    }
 
     DynamicData& operator=(const DynamicData& other)
     {
         binded = other.data;
+        dependencies = other.dependencies;
         bind();
         return *this;
     }
     DynamicData& operator=(DynamicData&& other)
     {
         binded = std::move(other.data);
+        dependencies = std::move(other.dependencies);
         bind();
         return *this;
     }
@@ -141,11 +149,13 @@ public:
         auto lambda = [weak_ret, weak_other](const value_type& v) mutable {
             auto other = weak_other.lock();
             if (!other) {
+                std::cout << "!!!!!11111 " << v << "\n";
                 return;
             }
 
             auto ret = weak_ret.lock();
             if (!ret) {
+                std::cout << "!!!!!22222 " << v << "\n";
                 return;
             }
 
@@ -156,11 +166,13 @@ public:
         auto lambda2 = [weak_ret, weak_this](const value_type& v) mutable {
             auto ret = weak_ret.lock();
             if (!ret) {
+                std::cout << "!!!!!33333 " << v << "\n";
                 return;
             }
 
             auto a = weak_this.lock();
             if (!a) {
+                std::cout << "!!!!!44444 " << v << "\n";
                 return;
             }
 
