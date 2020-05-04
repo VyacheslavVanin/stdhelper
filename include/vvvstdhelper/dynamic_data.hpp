@@ -19,7 +19,12 @@ public:
     using value_type = T;
 
     DynamicData() : DynamicData(T{}) {}
-    DynamicData(T val) : data(std::make_shared<Listener<T>>(val)) {}
+    DynamicData(T val)
+        : data(std::make_shared<Listener<T>>()),
+          binded(std::make_shared<Listener<T>>(val))
+    {
+        bind();
+    }
     DynamicData(const DynamicData& other)
         : data(std::make_shared<Listener<T>>()), binded{other.data},
           dependencies{other.dependencies}
@@ -28,7 +33,8 @@ public:
     }
 
     DynamicData(DynamicData&& other)
-        : data(std::make_shared<Listener<T>>()), binded{std::move(other.data)},
+        : data(std::make_shared<Listener<T>>()), binded{std::move(
+                                                     other.binded)},
           dependencies{std::move(other.dependencies)}
     {
         bind();
@@ -51,20 +57,17 @@ public:
 
     DynamicData& operator=(const value_type& other)
     {
-        *data = other;
+        *binded = other;
         return *this;
     }
 
     DynamicData& operator=(value_type&& other)
     {
-        *data = std::move(other);
+        *binded = std::move(other);
         return *this;
     }
 
     auto& action() { return data->action(); }
-
-    // explicit operator const T&() { return data->get(); }
-    // explicit operator T() && { return std::move(data->get()); }
 
     const T& get() const { return data->get(); }
     const T& operator*() const { return get(); }
@@ -81,6 +84,7 @@ public:
         action().addAction([weak_ret](const value_type& v) mutable {
             auto ret = weak_ret.lock();
             if (!ret) {
+                std::cout << "!!!!!11111 (unary) " << v << "\n";
                 return;
             }
             *ret = OP()(v);
@@ -104,6 +108,7 @@ public:
         action().addAction([weak_ret, k](const value_type& v) mutable {
             auto ret = weak_ret.lock();
             if (!ret) {
+                std::cout << "!!!!!11111 (value) " << v << "\n";
                 return;
             }
             *ret = OP()(v, k);
@@ -214,14 +219,8 @@ public:
 private:
     void bind()
     {
-        auto weak_data = std::weak_ptr<Listener<T>>(data);
-        binded->action().addAction([weak_data](const value_type& v) mutable {
-            auto ret = weak_data.lock();
-            if (!ret) {
-                return;
-            }
-            *ret = v;
-        });
+        binded->action().addAction(
+            [data(data)](const value_type& v) mutable { *data = v; });
         *data = binded->get();
     }
 

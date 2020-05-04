@@ -150,6 +150,7 @@ TEST(DynData, const_assign)
     ASSERT_EQ(210, d.get());
 }
 
+namespace {
 using DDD = DD<double>;
 using DDD_pair = std::pair<DDD, DDD>;
 
@@ -176,4 +177,28 @@ TEST(DynData, preserve_dependency)
     ASSERT_EQ(a.second.get(), 50);
     ASSERT_EQ(b.first.get(), 60);
     ASSERT_EQ(b.second.get(), 90);
+}
+}
+
+TEST(DynData, out_of_scope) {
+    DDD x;
+    DDD y;
+    {
+        DDD xx = 10;  // will die after exiting from scope,
+                      // so dependent variables will not be recalculted
+        DDD s = 20;
+        DDD yy = xx + std::move(s);
+        x = std::move(xx);  // move local DDD
+        y = std::move(yy);  // local DDD
+    }
+    ASSERT_EQ(x.get(), 10);
+    ASSERT_EQ(y.get(), 30);
+
+    {
+        DDD xx = 30;
+        x = std::move(xx);
+    }
+    ASSERT_EQ(x.get(), 30);
+    ASSERT_NE(y.get(), 50);  // NOT recalculated
+    ASSERT_EQ(y.get(), 30);  // still initial value
 }
