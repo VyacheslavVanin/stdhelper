@@ -84,7 +84,6 @@ public:
         action().addAction([weak_ret](const value_type& v) mutable {
             auto ret = weak_ret.lock();
             if (!ret) {
-                std::cout << "!!!!!11111 (unary) " << v << "\n";
                 return;
             }
             *ret = OP()(v);
@@ -108,7 +107,6 @@ public:
         action().addAction([weak_ret, k](const value_type& v) mutable {
             auto ret = weak_ret.lock();
             if (!ret) {
-                std::cout << "!!!!!11111 (value) " << v << "\n";
                 return;
             }
             *ret = OP()(v, k);
@@ -154,13 +152,11 @@ public:
         auto lambda = [weak_ret, weak_other](const value_type& v) mutable {
             auto other = weak_other.lock();
             if (!other) {
-                std::cout << "!!!!!11111 " << v << "\n";
                 return;
             }
 
             auto ret = weak_ret.lock();
             if (!ret) {
-                std::cout << "!!!!!22222 " << v << "\n";
                 return;
             }
 
@@ -171,13 +167,11 @@ public:
         auto lambda2 = [weak_ret, weak_this](const value_type& v) mutable {
             auto ret = weak_ret.lock();
             if (!ret) {
-                std::cout << "!!!!!33333 " << v << "\n";
                 return;
             }
 
             auto a = weak_this.lock();
             if (!a) {
-                std::cout << "!!!!!44444 " << v << "\n";
                 return;
             }
 
