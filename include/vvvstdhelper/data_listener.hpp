@@ -1,4 +1,5 @@
 #pragma once
+#include "has_operator.hpp"
 #include <ostream>
 
 namespace vvv {
@@ -54,31 +55,27 @@ public:
 
     DataListener& operator=(const T& other)
     {
-        data = other;
-        invoke(data);
+        assign(other);
         return *this;
     }
 
     DataListener& operator=(T&& other)
     {
-        data = std::move(other);
-        invoke(data);
+        assign(std::move(other));
         return *this;
     }
 
     template <typename A2>
     DataListener& operator=(const DataListener<T, A2>& other)
     {
-        data = other.data;
-        invoke(data);
+        assign(other.data);
         return *this;
     }
 
     template <typename A2>
     DataListener& operator=(DataListener<T, A2>&& other)
     {
-        data = std::move(other.data);
-        invoke(data);
+        assign(std::move(other.data));
         return *this;
     }
 
@@ -102,6 +99,21 @@ public:
     A& action() { return static_cast<A&>(*this); }
 
 private:
+    template <typename U>
+    void assign(U&& other)
+    {
+#if __cplusplus >= 201703L
+        if constexpr (vvv::has_eq(other)) {
+            if (other == data) {
+                return;
+            }
+        }
+#endif
+
+        data = std::forward<U>(other);
+        invoke(data);
+    }
+
     void invoke(const T& v) { action()(v); }
 
     T data;
