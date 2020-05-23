@@ -103,7 +103,7 @@ private:
     void assign(U&& other)
     {
 #if __cplusplus >= 201703L
-        if constexpr (vvv::has_eq(other)) {
+        if constexpr (vvv::has_eq<U>()) {
             if (other == data) {
                 return;
             }
